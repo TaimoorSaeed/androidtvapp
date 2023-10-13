@@ -1,5 +1,7 @@
+import 'package:androidtvapp/application/service/screen_service.dart';
 import 'package:androidtvapp/values/constant_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChannelVideos extends StatefulWidget {
   const ChannelVideos({super.key});
@@ -13,12 +15,9 @@ class _ChannelVideosState extends State<ChannelVideos>
   List<int> cont = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    var screenService = Provider.of<ScreenService>(context, listen: true);
+
     return Scaffold(
       backgroundColor: ConstantColors.whiteColor,
       bottomNavigationBar: Padding(
@@ -30,7 +29,7 @@ class _ChannelVideosState extends State<ChannelVideos>
               color: ConstantColors.black,
             ),
           ),
-          child: Center(
+          child: const Center(
             child: Text("Advertisement"),
           ),
         ),
@@ -61,10 +60,15 @@ class _ChannelVideosState extends State<ChannelVideos>
                     mainAxisSpacing: 12,
                   ),
                   children: cont
-                      .map((e) => Container(
-                            height: 200,
-                            width: 200,
-                            color: Colors.green,
+                      .map((e) => InkWell(
+                            onTap: () {
+                              screenService.screentoVideoDetail();
+                            },
+                            child: Container(
+                              height: 200,
+                              width: 200,
+                              color: Colors.green,
+                            ),
                           ))
                       .toList(),
                 ),
@@ -90,10 +94,15 @@ class _ChannelVideosState extends State<ChannelVideos>
                     mainAxisSpacing: 12,
                   ),
                   children: cont
-                      .map((e) => Container(
-                            height: 200,
-                            width: 200,
-                            color: Colors.green,
+                      .map((e) => InkWell(
+                            onTap: () {
+                              screenService.screentoVideoDetail();
+                            },
+                            child: Container(
+                              height: 200,
+                              width: 200,
+                              color: Colors.green,
+                            ),
                           ))
                       .toList(),
                 ),
@@ -119,10 +128,15 @@ class _ChannelVideosState extends State<ChannelVideos>
                     mainAxisSpacing: 12,
                   ),
                   children: cont
-                      .map((e) => Container(
-                            height: 200,
-                            width: 200,
-                            color: Colors.green,
+                      .map((e) => InkWell(
+                            onTap: () {
+                              screenService.screentoVideoDetail();
+                            },
+                            child: Container(
+                              height: 200,
+                              width: 200,
+                              color: Colors.green,
+                            ),
                           ))
                       .toList(),
                 ),

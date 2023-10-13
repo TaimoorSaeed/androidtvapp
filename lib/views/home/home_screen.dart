@@ -1,9 +1,10 @@
+import 'package:androidtvapp/application/service/screen_service.dart';
 import 'package:androidtvapp/values/constant_colors.dart';
 import 'package:androidtvapp/values/path.dart';
-import 'package:androidtvapp/views/channel/channel_videos.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,18 +14,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Widget? screen;
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      screen = ChannelVideos();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    var screenService = Provider.of<ScreenService>(context, listen: true);
+
     return Scaffold(
       backgroundColor: ConstantColors.whiteColor,
       appBar: AppBar(
@@ -35,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
           width: 200,
         ),
       ),
-      body: screen,
+      body: screenService.screen,
       drawer: Drawer(
         backgroundColor: ConstantColors.whiteColor,
         child: ListView(
@@ -69,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Reality TV'),
               onTap: () {
                 Navigator.pop(context);
+                screenService.screentoChannelVideo();
               },
             ),
             ListTile(
@@ -82,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Reality TV'),
               onTap: () {
                 Navigator.pop(context);
+                screenService.screentoChannelVideo();
               },
             ),
             ListTile(
@@ -95,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Reality TV'),
               onTap: () {
                 Navigator.pop(context);
+                screenService.screentoChannelVideo();
               },
             ),
             ListTile(
@@ -108,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Reality TV'),
               onTap: () {
                 Navigator.pop(context);
+                screenService.screentoChannelVideo();
               },
             ),
             ListTile(
@@ -121,6 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Reality TV'),
               onTap: () {
                 Navigator.pop(context);
+                screenService.screentoChannelVideo();
               },
             ),
             ListTile(
@@ -134,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Reality TV'),
               onTap: () {
                 Navigator.pop(context);
+                screenService.screentoChannelVideo();
               },
             ),
           ],
