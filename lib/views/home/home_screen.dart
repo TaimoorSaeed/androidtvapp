@@ -1,5 +1,7 @@
+import 'package:androidtvapp/application/model/channel_model.dart';
 import 'package:androidtvapp/application/service/channel_service.dart';
 import 'package:androidtvapp/application/service/screen_service.dart';
+import 'package:androidtvapp/application/service/video_service.dart';
 import 'package:androidtvapp/values/constant_colors.dart';
 import 'package:androidtvapp/values/path.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -15,9 +17,35 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  _getVideos({
+    required Channel channel,
+  }) {
+    var videoService = Provider.of<VideoService>(context, listen: false);
+    Provider.of<ScreenService>(context, listen: false).currentVideoChannel =
+        channel;
+
+    videoService.fetchBroadcastingVideos(
+      channelID: channel.id,
+    );
+
+    videoService.fetchLatestVideos(
+      channelID: channel.id,
+    );
+
+    videoService.fetchPopularVideos(
+      channelID: channel.id,
+    );
+  }
+
   @override
   void initState() {
-    Provider.of<ChannelService>(context, listen: false).fetchChannels();
+    Provider.of<ChannelService>(context, listen: false)
+        .fetchChannels()
+        .then((value) {
+      if (value != null) {
+        _getVideos(channel: value[0]);
+      }
+    });
 
     super.initState();
   }
@@ -37,7 +65,11 @@ class _HomeScreenState extends State<HomeScreen> {
           width: 200,
         ),
       ),
-      body: screenService.screen,
+      body: channelService.isFetching
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : screenService.screen,
       drawer: Drawer(
         backgroundColor: ConstantColors.whiteColor,
         child: ListView(
@@ -88,8 +120,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         title: Text(channel.title),
                         onTap: () {
+                          _getVideos(channel: channel);
+
                           Navigator.pop(context);
-                          screenService.screentoChannelVideo();
+                          screenService.screentoChannelVideo(
+                            channel: channel,
+                          );
                         },
                       );
                     }),

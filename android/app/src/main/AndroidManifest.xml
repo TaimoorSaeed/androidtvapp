@@ -24,6 +24,7 @@
     <application
         android:label="androidtvapp"
         android:name="${applicationName}"
+        android:banner="@drawable/banner"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

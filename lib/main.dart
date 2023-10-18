@@ -1,5 +1,6 @@
 import 'package:androidtvapp/application/service/channel_service.dart';
 import 'package:androidtvapp/application/service/screen_service.dart';
+import 'package:androidtvapp/application/service/video_service.dart';
 import 'package:androidtvapp/router/route_constant.dart';
 import 'package:androidtvapp/router/routers.dart';
 import 'package:androidtvapp/values/branding_color.dart';
@@ -26,6 +27,7 @@ class AndroidTVApp extends StatelessWidget {
         // Service Provider
         ChangeNotifierProvider(create: (_) => ScreenService()),
         ChangeNotifierProvider(create: (_) => ChannelService()),
+        ChangeNotifierProvider(create: (_) => VideoService()),
 
         // Helper Provider
       ],
