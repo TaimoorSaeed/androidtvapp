@@ -23,7 +23,7 @@ class _VideoDetailScreenState extends State<VideoDetailScreen> {
     var videoService = Provider.of<VideoService>(context, listen: true);
 
     return Scaffold(
-      backgroundColor: ConstantColors.whiteColor,
+      backgroundColor: ConstantColors.mainColor,
       body: videoService.isVideoFetching ||
               currentVideo.controller == null ||
               currentVideo.currentVideoChannel == null ||

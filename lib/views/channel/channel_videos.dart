@@ -22,24 +22,11 @@ class _ChannelVideosState extends State<ChannelVideos>
     var videoService = Provider.of<VideoService>(context, listen: true);
 
     return Scaffold(
-      backgroundColor: ConstantColors.whiteColor,
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Container(
-          height: 50,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: ConstantColors.black,
-            ),
-          ),
-          child: const Center(
-            child: Text("Advertisement"),
-          ),
-        ),
-      ),
+      backgroundColor: ConstantColors.mainColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 60, right: 60, bottom: 20),
+          padding:
+              const EdgeInsets.only(left: 60, right: 60, bottom: 20, top: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -47,7 +34,7 @@ class _ChannelVideosState extends State<ChannelVideos>
                 "Live Broadcasting",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: ConstantColors.black,
+                  fontSize: 20,
                 ),
               ),
               const SizedBox(height: 10),
@@ -93,7 +80,7 @@ class _ChannelVideosState extends State<ChannelVideos>
                 "Latest Videos",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: ConstantColors.black,
+                  fontSize: 20,
                 ),
               ),
               const SizedBox(height: 10),
@@ -138,7 +125,7 @@ class _ChannelVideosState extends State<ChannelVideos>
                 "Most viewed",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: ConstantColors.black,
+                  fontSize: 20,
                 ),
               ),
               const SizedBox(height: 10),

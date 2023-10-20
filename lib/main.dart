@@ -43,6 +43,7 @@ class AndroidTVApp extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ).fontFamily,
             primarySwatch: brandingColor,
+            brightness: Brightness.dark,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
           ),
