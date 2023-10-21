@@ -77,7 +77,7 @@ class VideoService extends ChangeNotifier {
         'channelId': channelID,
         'order': 'date',
         'maxResults': 10,
-        'type': 'any'
+        'type': 'video'
       };
 
       var res = await AndroidTVApi.dio.get(
@@ -122,7 +122,7 @@ class VideoService extends ChangeNotifier {
         'channelId': channelID,
         'order': 'viewCount',
         'maxResults': 10,
-        'type': 'any'
+        'type': 'video'
       };
 
       var res = await AndroidTVApi.dio.get(
@@ -167,7 +167,7 @@ class VideoService extends ChangeNotifier {
         'channelId': channelID,
         'maxResults': 4,
         'order': 'relevance',
-        'type': 'any'
+        'type': 'video'
       };
 
       var res = await AndroidTVApi.dio.get(

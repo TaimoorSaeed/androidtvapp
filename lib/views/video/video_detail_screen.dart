@@ -2,7 +2,6 @@ import 'package:androidtvapp/application/service/screen_service.dart';
 import 'package:androidtvapp/application/service/video_service.dart';
 import 'package:androidtvapp/values/constant_colors.dart';
 import 'package:androidtvapp/widgets/video_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -19,18 +18,18 @@ class VideoDetailScreen extends StatefulWidget {
 class _VideoDetailScreenState extends State<VideoDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    var currentVideo = Provider.of<ScreenService>(context, listen: true);
+    var screenService = Provider.of<ScreenService>(context, listen: true);
     var videoService = Provider.of<VideoService>(context, listen: true);
 
     return Scaffold(
       backgroundColor: ConstantColors.mainColor,
       body: videoService.isVideoFetching ||
-              currentVideo.controller == null ||
-              currentVideo.currentVideoChannel == null ||
+              screenService.controller == null ||
+              screenService.currentChannelID == null ||
               videoService.isSuggestionVideosFetching
           ? const Center(
               child: CircularProgressIndicator(
-                color: ConstantColors.black,
+                color: ConstantColors.whiteColor,
               ),
             )
           : SingleChildScrollView(
@@ -45,8 +44,15 @@ class _VideoDetailScreenState extends State<VideoDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text(
+                            screenService.currentChannelName!,
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(height: 25),
                           YoutubePlayer(
-                            controller: currentVideo.controller!,
+                            controller: screenService.controller!,
                             showVideoProgressIndicator: true,
                             width: MediaQuery.of(context).size.width / 2,
                             aspectRatio: 16 / 9,
@@ -55,43 +61,22 @@ class _VideoDetailScreenState extends State<VideoDetailScreen> {
                               handleColor: Colors.white,
                             ),
                           ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 20),
                           Text(videoService.singleVideo!.title),
-                          const SizedBox(height: 20),
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 20,
-                                backgroundColor: Colors.transparent,
-                                backgroundImage: CachedNetworkImageProvider(
-                                  currentVideo
-                                      .currentVideoChannel!.profilePictureUrl,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Text(currentVideo.currentVideoChannel!.title)
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                videoService.singleVideo!.publishedAt,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                ),
-                              ),
-                              Text(
-                                "${videoService.singleVideo!.views} views",
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
+                          const SizedBox(height: 15),
+                          Text(
+                            "${videoService.singleVideo!.views} views",
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
                           ),
                           const SizedBox(height: 10),
-                          Text(videoService.singleVideo!.description),
+                          Text(
+                            videoService.singleVideo!.description,
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -115,12 +100,12 @@ class _VideoDetailScreenState extends State<VideoDetailScreen> {
                                 return VideoWidget(
                                   video: video,
                                   onTap: () {
-                                    currentVideo.setCurrentVideo(
+                                    screenService.setCurrentVideo(
                                       context: context,
                                       video: video,
                                     );
                                     videoService.fetchVideo(videoID: video.id);
-                                    currentVideo.screentoVideoDetail();
+                                    screenService.screentoVideoDetail();
                                   },
                                 );
                               },
@@ -131,12 +116,16 @@ class _VideoDetailScreenState extends State<VideoDetailScreen> {
                             height: 100,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                color: ConstantColors.black,
-                              ),
+                              color: ConstantColors.greyColor,
+                              borderRadius: BorderRadius.circular(8),
                             ),
                             child: const Center(
-                              child: Text("Advertisement"),
+                              child: Text(
+                                "Advertisement",
+                                style: TextStyle(
+                                  color: ConstantColors.black,
+                                ),
+                              ),
                             ),
                           ),
                         ],

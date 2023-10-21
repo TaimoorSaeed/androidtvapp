@@ -4,4 +4,9 @@ class Constants {
   static const String artists = "Artists";
   static const String churches = "Churches";
   static const String toons = "Toons";
+
+  // Channel Videos Screen
+  static const String liveBroadCasting = "Live Broadcasting";
+  static const String latestVideos = "Latest Videos";
+  static const String mostViewed = "Most Viewed";
 }

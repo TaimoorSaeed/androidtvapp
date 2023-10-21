@@ -18,26 +18,23 @@ class VideoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: Container(
-        height: 200,
-        width: 200,
-        color: Colors.black.withOpacity(0.2),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            CachedNetworkImage(
-              imageUrl: video.thumbnailUrl,
-              fit: BoxFit.cover,
-            ),
-            Container(
-              color: ConstantColors.black.withOpacity(0.4),
-            ),
-            const Icon(
-              FontAwesomeIcons.circlePlay,
-              color: ConstantColors.whiteColor,
-            )
-          ],
-        ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          CachedNetworkImage(
+            imageUrl: video.thumbnailUrl,
+            fit: BoxFit.cover,
+            width: 200,
+            height: 200,
+          ),
+          Container(
+            color: ConstantColors.black.withOpacity(0.4),
+          ),
+          const Icon(
+            FontAwesomeIcons.circlePlay,
+            color: ConstantColors.whiteColor,
+          )
+        ],
       ),
     );
   }

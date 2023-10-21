@@ -6,6 +6,7 @@ class Path {
   // Images
   static const String banner = "assets/images/banner.jpg";
   static const String bannerContent = "assets/images/banner-content.png";
+  static const String churchBG = "assets/images/church-bg.png";
 
   // Json
 

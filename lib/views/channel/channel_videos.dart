@@ -1,5 +1,6 @@
 import 'package:androidtvapp/application/service/screen_service.dart';
 import 'package:androidtvapp/application/service/video_service.dart';
+import 'package:androidtvapp/utils/constants.dart';
 import 'package:androidtvapp/values/constant_colors.dart';
 import 'package:androidtvapp/widgets/video_widget.dart';
 import 'package:flutter/material.dart';
@@ -30,54 +31,60 @@ class _ChannelVideosState extends State<ChannelVideos>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Live Broadcasting",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
-                ),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                height: 110,
-                child: videoService.isBroadcastVideosFetching
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: ConstantColors.black,
-                        ),
-                      )
-                    : GridView(
-                        scrollDirection: Axis.horizontal,
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 300,
-                          childAspectRatio: 1.5 / 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                        ),
-                        children: videoService.broadcastingVideos
-                            .map(
-                              (broadcastVideo) => VideoWidget(
-                                video: broadcastVideo,
-                                onTap: () {
-                                  screenService.setCurrentVideo(
-                                    context: context,
-                                    video: broadcastVideo,
-                                  );
-
-                                  videoService.fetchVideo(
-                                      videoID: broadcastVideo.id);
-                                  screenService.screentoVideoDetail();
-                                },
+              if (videoService.broadcastingVideos.isNotEmpty)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      Constants.liveBroadCasting,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 110,
+                      child: videoService.isBroadcastVideosFetching
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: ConstantColors.whiteColor,
                               ),
                             )
-                            .toList(),
-                      ),
-              ),
-              const SizedBox(height: 15),
+                          : GridView(
+                              scrollDirection: Axis.horizontal,
+                              gridDelegate:
+                                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 300,
+                                childAspectRatio: 1.5 / 2,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12,
+                              ),
+                              children: videoService.broadcastingVideos
+                                  .map(
+                                    (broadcastVideo) => VideoWidget(
+                                      video: broadcastVideo,
+                                      onTap: () {
+                                        screenService.setCurrentVideo(
+                                          context: context,
+                                          video: broadcastVideo,
+                                        );
+
+                                        videoService.fetchVideo(
+                                            videoID: broadcastVideo.id);
+                                        screenService.screentoVideoDetail();
+                                      },
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                    ),
+                    const SizedBox(height: 15),
+                  ],
+                ),
               const Text(
-                "Latest Videos",
+                Constants.latestVideos,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 20,
@@ -90,7 +97,7 @@ class _ChannelVideosState extends State<ChannelVideos>
                 child: videoService.isLatestVideosFetching
                     ? const Center(
                         child: CircularProgressIndicator(
-                          color: ConstantColors.black,
+                          color: ConstantColors.whiteColor,
                         ),
                       )
                     : GridView(
@@ -122,7 +129,7 @@ class _ChannelVideosState extends State<ChannelVideos>
               ),
               const SizedBox(height: 15),
               const Text(
-                "Most viewed",
+                Constants.mostViewed,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 20,
@@ -135,7 +142,7 @@ class _ChannelVideosState extends State<ChannelVideos>
                 child: videoService.isPopularVideosFetching
                     ? const Center(
                         child: CircularProgressIndicator(
-                          color: ConstantColors.black,
+                          color: ConstantColors.whiteColor,
                         ),
                       )
                     : GridView(

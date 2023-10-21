@@ -1,11 +1,10 @@
-import 'package:androidtvapp/application/model/channel_model.dart';
-import 'package:androidtvapp/application/service/channel_service.dart';
 import 'package:androidtvapp/application/service/screen_service.dart';
 import 'package:androidtvapp/application/service/video_service.dart';
+import 'package:androidtvapp/values/common.dart';
 import 'package:androidtvapp/values/constant_colors.dart';
 import 'package:androidtvapp/values/path.dart';
-import 'package:androidtvapp/views/dashboard/dashboard_screen.dart';
 import 'package:androidtvapp/widgets/search_widget.dart';
+import 'package:androidtvapp/widgets/sidebar_card_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -20,42 +19,38 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   _getVideos({
-    required Channel channel,
+    required String channelID,
+    required String channelName,
   }) {
     var videoService = Provider.of<VideoService>(context, listen: false);
-    Provider.of<ScreenService>(context, listen: false).currentVideoChannel =
-        channel;
+    var screenService = Provider.of<ScreenService>(context, listen: false);
+
+    screenService.screentoChannelVideo(
+        channelID: channelID, channelName: channelName);
 
     videoService.fetchBroadcastingVideos(
-      channelID: channel.id,
+      channelID: channelID,
     );
 
     videoService.fetchLatestVideos(
-      channelID: channel.id,
+      channelID: channelID,
     );
 
     videoService.fetchPopularVideos(
-      channelID: channel.id,
+      channelID: channelID,
     );
   }
 
   @override
   void initState() {
-    Provider.of<ChannelService>(context, listen: false)
-        .fetchChannels()
-        .then((value) {
-      if (value != null) {
-        _getVideos(channel: value[0]);
-      }
-    });
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    var common = Provider.of<Common>(context, listen: false);
+
     var screenService = Provider.of<ScreenService>(context, listen: true);
-    var channelService = Provider.of<ChannelService>(context, listen: true);
 
     return Scaffold(
       backgroundColor: ConstantColors.mainColor,
@@ -63,9 +58,14 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: ConstantColors.mainColor,
         elevation: 0.0,
         toolbarHeight: 80,
-        title: Image.asset(
-          Path.logo,
-          width: 120,
+        title: InkWell(
+          onTap: () {
+            screenService.screentoDashboardScreen();
+          },
+          child: Image.asset(
+            Path.logo,
+            width: 120,
+          ),
         ),
         actions: const [
           Icon(
@@ -88,11 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(width: 60),
         ],
       ),
-      body: channelService.isFetching
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : screenService.screen,
+      body: screenService.screen,
       drawer: Drawer(
         backgroundColor: ConstantColors.whiteColor,
         child: ListView(
@@ -107,9 +103,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(),
-                      Image.asset(
-                        Path.colorLogo,
-                        width: 130,
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: ConstantColors.mainColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Image.asset(
+                          Path.logo,
+                          width: 60,
+                        ),
                       ),
                       InkWell(
                         onTap: () {
@@ -128,47 +131,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            channelService.isFetching
-                ? const Padding(
-                    padding: EdgeInsets.only(top: 20.0),
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: ConstantColors.black,
-                      ),
-                    ),
-                  )
-                : ListView.builder(
-                    itemCount: channelService.channels.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: ((context, index) {
-                      var channel = channelService.channels[index];
+            ListView.builder(
+              itemCount: common.artists.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: ((context, index) {
+                var artist = common.artists[index];
 
-                      return ListTile(
-                        leading: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.transparent,
-                          backgroundImage: CachedNetworkImageProvider(
-                            channel.profilePictureUrl,
-                          ),
-                        ),
-                        title: Text(
-                          channel.title,
-                          style: TextStyle(
-                            color: ConstantColors.black,
-                          ),
-                        ),
-                        onTap: () {
-                          _getVideos(channel: channel);
+                return SideBarCardWidget(
+                  thumbnail: artist["thumbnail"],
+                  name: artist["name"],
+                  onTap: () {
+                    _getVideos(
+                      channelID: artist["channel_id"],
+                      channelName: artist["name"],
+                    );
 
-                          Navigator.pop(context);
-                          screenService.screentoChannelVideo(
-                            channel: channel,
-                          );
-                        },
-                      );
-                    }),
-                  ),
+                    Navigator.pop(context);
+                  },
+                );
+              }),
+            ),
           ],
         ),
       ),

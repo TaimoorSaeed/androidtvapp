@@ -1,4 +1,3 @@
-import 'package:androidtvapp/application/model/channel_model.dart';
 import 'package:androidtvapp/application/model/video_model.dart';
 import 'package:androidtvapp/application/service/video_service.dart';
 import 'package:androidtvapp/views/channel/channel_videos.dart';
@@ -11,14 +10,25 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 class ScreenService extends ChangeNotifier {
   Widget? screen = const DashboardScreen();
 
-  Channel? currentVideoChannel;
+  String? currentChannelID;
+  String? currentChannelName;
+
   YoutubePlayerController? controller;
 
   void screentoChannelVideo({
-    required Channel channel,
+    required String channelID,
+    required String channelName,
   }) {
-    currentVideoChannel = channel;
+    currentChannelID = channelID;
+    currentChannelName = channelName;
     screen = const ChannelVideos();
+
+    notifyListeners();
+  }
+
+  void screentoDashboardScreen() {
+    screen = const DashboardScreen();
+
     notifyListeners();
   }
 
@@ -32,7 +42,7 @@ class ScreenService extends ChangeNotifier {
     required Video video,
   }) {
     Provider.of<VideoService>(context, listen: false)
-        .fetchSuggestionVideos(channelID: currentVideoChannel!.id);
+        .fetchSuggestionVideos(channelID: currentChannelID!);
 
     controller = YoutubePlayerController(
       initialVideoId: video.id,
