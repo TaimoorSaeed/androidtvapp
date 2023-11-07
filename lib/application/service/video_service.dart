@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:androidtvapp/application/android_tv_api.dart';
 import 'package:androidtvapp/application/model/single_video_model.dart';
 import 'package:androidtvapp/application/model/video_model.dart';
@@ -89,6 +91,8 @@ class VideoService extends ChangeNotifier {
           },
         ),
       );
+
+      print(res.data["items"]);
 
       latestVideos = [];
 

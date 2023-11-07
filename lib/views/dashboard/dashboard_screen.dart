@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:androidtvapp/application/service/screen_service.dart';
 import 'package:androidtvapp/application/service/video_service.dart';
 import 'package:androidtvapp/utils/constants.dart';
@@ -5,6 +6,7 @@ import 'package:androidtvapp/values/common.dart';
 import 'package:androidtvapp/values/constant_colors.dart';
 import 'package:androidtvapp/values/path.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -15,6 +17,42 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  BannerAd? _bannerAd;
+  bool _isLoaded = false;
+
+  final adUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
+
+  void loadAd() {
+    _bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      request: const AdRequest(),
+      size: AdSize.fullBanner,
+      listener: BannerAdListener(
+        // Called when an ad is successfully received.
+        onAdLoaded: (ad) {
+          debugPrint('$ad loaded.');
+          setState(() {
+            _isLoaded = true;
+          });
+        },
+        // Called when an ad request failed.
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('BannerAd failed to load: $err');
+          // Dispose the ad here to free resources.
+          ad.dispose();
+        },
+      ),
+    )..load();
+  }
+
+  @override
+  void initState() {
+    loadAd();
+    super.initState();
+  }
+
   _getVideos({
     required String channelID,
     required String channelName,
@@ -73,31 +111,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
               const SizedBox(height: 10),
               SizedBox(
                 width: double.infinity,
-                height: 110,
+                height: 160,
                 child: GridView(
                   scrollDirection: Axis.horizontal,
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 300,
-                    childAspectRatio: 1.5 / 2.7,
+                    childAspectRatio: 2.4 / 3,
                     mainAxisSpacing: 12,
                   ),
-                  children: common.tvAndLiveBroadcasts
-                      .map(
-                        (item) => InkWell(
+                  children: common.tvAndLiveBroadcasts.map((item) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          focusColor: Colors.blue[300],
+                          borderRadius: BorderRadius.circular(10),
                           onTap: () => _getVideos(
                             channelID: item["channel_id"],
                             channelName: item["name"],
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.asset(
-                              item["thumbnail"],
-                              fit: BoxFit.cover,
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.asset(
+                                item["thumbnail"],
+                                fit: BoxFit.cover,
+                                height: 120,
+                                width: 230,
+                              ),
                             ),
                           ),
                         ),
-                      )
-                      .toList(),
+                        const SizedBox(height: 5),
+                        Text(
+                          item["name"],
+                        ),
+                      ],
+                    );
+                  }).toList(),
                 ),
               ),
               const SizedBox(height: 25),
@@ -110,33 +162,73 @@ class _DashboardScreenState extends State<DashboardScreen> {
               const SizedBox(height: 10),
               SizedBox(
                 width: double.infinity,
-                height: 110,
+                height: 160,
                 child: GridView(
                   scrollDirection: Axis.horizontal,
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 350,
-                    childAspectRatio: 1.5 / 1.5,
+                    childAspectRatio: 2 / 1.5,
                     mainAxisSpacing: 20,
                   ),
                   children: common.artists
                       .map(
-                        (item) => InkWell(
-                          onTap: () => _getVideos(
-                            channelID: item["channel_id"],
-                            channelName: item["name"],
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Image.asset(
-                              item["thumbnail"],
-                              fit: BoxFit.cover,
+                        (item) => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              focusColor: Colors.blue[300],
+                              borderRadius: BorderRadius.circular(100),
+                              onTap: () => _getVideos(
+                                channelID: item["channel_id"],
+                                channelName: item["name"],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(3),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Image.asset(
+                                    item["thumbnail"],
+                                    fit: BoxFit.cover,
+                                    width: 100,
+                                    height: 100,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                            const SizedBox(height: 10),
+                            Text(
+                              item["name"],
+                            ),
+                          ],
                         ),
                       )
                       .toList(),
                 ),
               ),
+              const SizedBox(height: 25),
+              _isLoaded
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: SizedBox(
+                            width: _bannerAd!.size.width.toDouble(),
+                            height: _bannerAd!.size.height.toDouble(),
+                            child: AdWidget(ad: _bannerAd!),
+                          ),
+                        ),
+                      ],
+                    )
+                  : SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 60,
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: ConstantColors.whiteColor,
+                        ),
+                      ),
+                    ),
               const SizedBox(height: 25),
               const Text(
                 Constants.churches,
@@ -158,27 +250,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: common.churches
                       .map(
                         (item) => InkWell(
+                          focusColor: Colors.blue[300],
+                          borderRadius: BorderRadius.circular(10),
                           onTap: () => _getVideos(
                             channelID: item["channel_id"],
                             channelName: item["name"],
                           ),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.asset(
-                                  Path.churchBG,
-                                  fit: BoxFit.cover,
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.asset(
+                                    Path.churchBG,
+                                    fit: BoxFit.cover,
+                                    height: 120,
+                                    width: 230,
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Text(
-                                  item["name"],
+                                Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Text(
+                                    item["name"],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       )
@@ -195,28 +294,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
               const SizedBox(height: 10),
               SizedBox(
                 width: double.infinity,
-                height: 110,
+                height: 160,
                 child: GridView(
                   scrollDirection: Axis.horizontal,
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 300,
-                    childAspectRatio: 1.5 / 2.7,
+                    childAspectRatio: 2.4 / 3,
                     mainAxisSpacing: 12,
                   ),
                   children: common.toons
                       .map(
-                        (item) => InkWell(
-                          onTap: () => _getVideos(
-                            channelID: item["channel_id"],
-                            channelName: item["name"],
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.asset(
-                              item["thumbnail"],
-                              fit: BoxFit.cover,
+                        (item) => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              focusColor: Colors.blue[300],
+                              borderRadius: BorderRadius.circular(10),
+                              onTap: () => _getVideos(
+                                channelID: item["channel_id"],
+                                channelName: item["name"],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.asset(
+                                    item["thumbnail"],
+                                    fit: BoxFit.cover,
+                                    height: 120,
+                                    width: 230,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                            const SizedBox(height: 5),
+                            Text(item["name"]),
+                          ],
                         ),
                       )
                       .toList(),

@@ -1,15 +1,37 @@
+// ignore_for_file: avoid_print
+
+import 'package:androidtvapp/application/service/firebase_service.dart';
 import 'package:androidtvapp/application/service/screen_service.dart';
 import 'package:androidtvapp/application/service/video_service.dart';
 import 'package:androidtvapp/router/route_constant.dart';
 import 'package:androidtvapp/router/routers.dart';
 import 'package:androidtvapp/values/branding_color.dart';
 import 'package:androidtvapp/values/common.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+  await FirebaseService().initNotification();
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  MobileAds.instance.initialize();
+
   runApp(const AndroidTVApp());
 }
 
@@ -34,7 +56,7 @@ class AndroidTVApp extends StatelessWidget {
           LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent(),
         },
         child: MaterialApp(
-          title: 'Android TV App',
+          title: 'Suryoyo TV',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             fontFamily: GoogleFonts.inter(

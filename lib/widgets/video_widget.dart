@@ -1,8 +1,6 @@
 import 'package:androidtvapp/application/model/video_model.dart';
-import 'package:androidtvapp/values/constant_colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class VideoWidget extends StatelessWidget {
   const VideoWidget({
@@ -18,21 +16,29 @@ class VideoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: Stack(
-        alignment: Alignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CachedNetworkImage(
-            imageUrl: video.thumbnailUrl,
-            fit: BoxFit.cover,
-            width: 200,
-            height: 200,
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: video.thumbnailUrl,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 100,
+                ),
+              ),
+            ],
           ),
-          Container(
-            color: ConstantColors.black.withOpacity(0.4),
-          ),
-          const Icon(
-            FontAwesomeIcons.circlePlay,
-            color: ConstantColors.whiteColor,
+          const SizedBox(height: 5),
+          Text(
+            video.title,
+            style: const TextStyle(
+              fontSize: 11,
+            ),
           )
         ],
       ),

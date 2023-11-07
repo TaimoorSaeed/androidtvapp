@@ -2,4 +2,4 @@
 const String homeRoute = "home";
 
 // Channel Routes
-const String videoDetailRoute = "videoDetail";
+const String fullVideoRoute = "fullVideo";

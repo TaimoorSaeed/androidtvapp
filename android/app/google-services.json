@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "736129369732",
+    "project_id": "suryoyotube-cb233",
+    "storage_bucket": "suryoyotube-cb233.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736129369732:android:517f829e30e62fd8c664d1",
+        "android_client_info": {
+          "package_name": "com.evismedia.suryoyotube"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKo2PEKA7GKcxAdoq8X-Pc2Eq7-sOLEkw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

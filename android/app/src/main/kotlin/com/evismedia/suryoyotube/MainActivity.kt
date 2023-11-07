@@ -1,4 +1,4 @@
-package com.example.androidtvapp
+package com.evismedia.suryoyotube
 
 import io.flutter.embedding.android.FlutterActivity
 

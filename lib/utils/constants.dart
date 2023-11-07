@@ -6,6 +6,7 @@ class Constants {
   static const String toons = "Toons";
 
   // Channel Videos Screen
+  static const String watchLive = "Watch Live";
   static const String liveBroadCasting = "Live Broadcasting";
   static const String latestVideos = "Latest Videos";
   static const String mostViewed = "Most Viewed";

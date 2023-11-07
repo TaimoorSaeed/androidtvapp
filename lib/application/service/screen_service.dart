@@ -47,7 +47,7 @@ class ScreenService extends ChangeNotifier {
     controller = YoutubePlayerController(
       initialVideoId: video.id,
       flags: const YoutubePlayerFlags(
-        controlsVisibleAtStart: true,
+        controlsVisibleAtStart: false,
       ),
     );
     notifyListeners();
