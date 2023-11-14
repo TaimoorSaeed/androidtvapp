@@ -1,5 +1,6 @@
 import 'package:androidtvapp/application/service/screen_service.dart';
 import 'package:androidtvapp/application/service/video_service.dart';
+import 'package:androidtvapp/main.dart';
 import 'package:androidtvapp/values/common.dart';
 import 'package:androidtvapp/values/constant_colors.dart';
 import 'package:androidtvapp/values/path.dart';
@@ -18,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String localization = "English";
+  String localization = "en";
 
   int currentLBDrawerIndex = -1;
   int currentCDrawerIndex = -1;
@@ -113,25 +114,42 @@ class _HomeScreenState extends State<HomeScreen> {
               style: const TextStyle(),
               dropdownColor: ConstantColors.secondMainColor,
               underline: Container(),
-              padding: const EdgeInsets.only(top: 15, right: 60),
+              padding: MediaQuery.of(context).size.width > 650
+                  ? const EdgeInsets.only(top: 15, right: 60)
+                  : const EdgeInsets.only(top: 15, right: 20),
               items: const [
                 DropdownMenuItem(
-                  value: "English",
+                  value: "en",
                   child: Text(
-                    "English",
+                    "en",
                   ),
                 ),
                 DropdownMenuItem(
-                  value: "Germany",
+                  value: "de",
                   child: Text(
-                    "Germany",
+                    "de",
                   ),
                 ),
               ],
               onChanged: (val) {
+                AndroidTVApp.setLocale(
+                  context,
+                  Locale(val!, ''),
+                );
+
                 setState(() {
-                  localization = val!;
+                  localization = val;
                 });
+
+                // if (val == "en") {
+                //   setState(() {
+                //     localization = "English";
+                //   });
+                // } else {
+                //   setState(() {
+                //     localization = "German";
+                //   });
+                // }
               },
               value: localization,
             ),

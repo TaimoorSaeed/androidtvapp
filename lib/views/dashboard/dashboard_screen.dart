@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'package:androidtvapp/application/service/screen_service.dart';
 import 'package:androidtvapp/application/service/video_service.dart';
-import 'package:androidtvapp/utils/constants.dart';
 import 'package:androidtvapp/values/common.dart';
 import 'package:androidtvapp/values/constant_colors.dart';
 import 'package:androidtvapp/values/path.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -84,7 +84,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       backgroundColor: ConstantColors.mainColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 60, right: 60, bottom: 20),
+          padding: MediaQuery.of(context).size.width > 650
+              ? const EdgeInsets.only(left: 60, right: 60, bottom: 20)
+              : const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -93,18 +95,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(14),
-                    child: Image.asset(Path.banner),
+                    child: Image.asset(
+                      Path.banner,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 20, bottom: 20),
-                    child: Image.asset(Path.bannerContent),
+                    child: Image.asset(
+                      Path.bannerContent,
+                      height:
+                          MediaQuery.of(context).size.width > 650 ? null : 80,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 30),
-              const Text(
-                Constants.tvAndLiveBroadCasts,
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.tvAndLiveBroadcasts,
+                style: const TextStyle(
                   fontSize: 20,
                 ),
               ),
@@ -153,9 +161,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               const SizedBox(height: 25),
-              const Text(
-                Constants.artists,
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.artists,
+                style: const TextStyle(
                   fontSize: 20,
                 ),
               ),
@@ -230,9 +238,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
               const SizedBox(height: 25),
-              const Text(
-                Constants.churches,
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.churches,
+                style: const TextStyle(
                   fontSize: 20,
                 ),
               ),
@@ -285,9 +293,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               const SizedBox(height: 25),
-              const Text(
-                Constants.toons,
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.toons,
+                style: const TextStyle(
                   fontSize: 20,
                 ),
               ),

@@ -73,150 +73,285 @@ class _VideoDetailScreenState extends State<VideoDetailScreen> {
     var screenService = Provider.of<ScreenService>(context, listen: true);
     var videoService = Provider.of<VideoService>(context, listen: true);
 
-    return RawKeyboardListener(
-      focusNode: FocusNode(),
-      onKey: _onKeyPressed,
-      child: Scaffold(
-        backgroundColor: ConstantColors.mainColor,
-        body: videoService.isVideoFetching ||
-                screenService.controller == null ||
-                screenService.currentChannelID == null ||
-                videoService.isSuggestionVideosFetching
-            ? const Center(
-                child: CircularProgressIndicator(
-                  color: ConstantColors.whiteColor,
-                ),
-              )
-            : SingleChildScrollView(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(left: 60, right: 60, bottom: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              screenService.currentChannelName!,
-                              style: const TextStyle(
-                                fontSize: 20,
-                              ),
-                            ),
-                            const SizedBox(height: 25),
-                            YoutubePlayer(
-                              controller: screenService.controller!,
-                              showVideoProgressIndicator: true,
-                              width: MediaQuery.of(context).size.width / 2,
-                              aspectRatio: 16 / 9,
-                              bottomActions: [
-                                CurrentPosition(
-                                  controller: screenService.controller!,
-                                ),
-                                ProgressBar(
-                                  isExpanded: true,
-                                  controller: screenService.controller!,
-                                  colors: const ProgressBarColors(
-                                    playedColor: Colors.white,
-                                    handleColor: Colors.white,
-                                  ),
-                                ),
-                                RemainingDuration(
-                                  controller: screenService.controller!,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      fullVideoRoute,
-                                      arguments: screenService.controller!,
-                                    );
-                                  },
-                                  child: const Icon(
-                                    Icons.fullscreen,
-                                  ),
-                                )
-                                // TotalDuration(),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Text(videoService.singleVideo!.title),
-                            const SizedBox(height: 15),
-                            Text(
-                              "${videoService.singleVideo!.views} views",
-                              style: const TextStyle(
-                                fontSize: 12,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              videoService.singleVideo!.description,
-                              style: const TextStyle(
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth >= 650) {
+          return RawKeyboardListener(
+            focusNode: FocusNode(),
+            onKey: _onKeyPressed,
+            child: Scaffold(
+              backgroundColor: ConstantColors.mainColor,
+              body: videoService.isVideoFetching ||
+                      screenService.controller == null ||
+                      screenService.currentChannelID == null ||
+                      videoService.isSuggestionVideosFetching
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: ConstantColors.whiteColor,
                       ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 2.8,
-                        child: Column(
+                    )
+                  : SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 60, right: 60, bottom: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GridView.count(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10.0,
-                              mainAxisSpacing: 10.0,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              children: List.generate(
-                                videoService.suggestionVideos.length,
-                                (index) {
-                                  var video =
-                                      videoService.suggestionVideos[index];
-
-                                  return VideoWidget(
-                                    video: video,
-                                    onTap: () {
-                                      screenService.setCurrentVideo(
-                                        context: context,
-                                        video: video,
-                                      );
-                                      videoService.fetchVideo(
-                                          videoID: video.id);
-                                      screenService.screentoVideoDetail();
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            _isLoaded
-                                ? SizedBox(
-                                    width: _bannerAd!.size.width.toDouble(),
-                                    height: _bannerAd!.size.height.toDouble(),
-                                    child: AdWidget(ad: _bannerAd!),
-                                  )
-                                : const SizedBox(
-                                    height: 100,
-                                    width: double.infinity,
-                                    child: Center(
-                                      child: CircularProgressIndicator(
-                                        color: ConstantColors.whiteColor,
-                                      ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    screenService.currentChannelName!,
+                                    style: const TextStyle(
+                                      fontSize: 20,
                                     ),
                                   ),
+                                  const SizedBox(height: 25),
+                                  YoutubePlayer(
+                                    controller: screenService.controller!,
+                                    showVideoProgressIndicator: true,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    aspectRatio: 16 / 9,
+                                    bottomActions: [
+                                      CurrentPosition(
+                                        controller: screenService.controller!,
+                                      ),
+                                      ProgressBar(
+                                        isExpanded: true,
+                                        controller: screenService.controller!,
+                                        colors: const ProgressBarColors(
+                                          playedColor: Colors.white,
+                                          handleColor: Colors.white,
+                                        ),
+                                      ),
+                                      RemainingDuration(
+                                        controller: screenService.controller!,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            fullVideoRoute,
+                                            arguments:
+                                                screenService.controller!,
+                                          );
+                                        },
+                                        child: const Icon(
+                                          Icons.fullscreen,
+                                        ),
+                                      )
+                                      // TotalDuration(),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Text(videoService.singleVideo!.title),
+                                  const SizedBox(height: 15),
+                                  Text(
+                                    "${videoService.singleVideo!.views} views",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    videoService.singleVideo!.description,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2.8,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  GridView.count(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 10.0,
+                                    mainAxisSpacing: 10.0,
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    children: List.generate(
+                                      videoService.suggestionVideos.length,
+                                      (index) {
+                                        var video = videoService
+                                            .suggestionVideos[index];
+
+                                        return VideoWidget(
+                                          video: video,
+                                          onTap: () {
+                                            screenService.setCurrentVideo(
+                                              context: context,
+                                              video: video,
+                                            );
+                                            videoService.fetchVideo(
+                                                videoID: video.id);
+                                            screenService.screentoVideoDetail();
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(height: 15),
+                                  _isLoaded
+                                      ? SizedBox(
+                                          width:
+                                              _bannerAd!.size.width.toDouble(),
+                                          height:
+                                              _bannerAd!.size.height.toDouble(),
+                                          child: AdWidget(ad: _bannerAd!),
+                                        )
+                                      : const SizedBox(
+                                          height: 100,
+                                          width: double.infinity,
+                                          child: Center(
+                                            child: CircularProgressIndicator(
+                                              color: ConstantColors.whiteColor,
+                                            ),
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                    ],
+                    ),
+            ),
+          );
+        } else {
+          return Scaffold(
+            backgroundColor: ConstantColors.mainColor,
+            body: videoService.isVideoFetching ||
+                    screenService.controller == null ||
+                    screenService.currentChannelID == null ||
+                    videoService.isSuggestionVideosFetching
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: ConstantColors.whiteColor,
+                    ),
+                  )
+                : SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            screenService.currentChannelName!,
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(height: 25),
+                          YoutubePlayer(
+                            controller: screenService.controller!,
+                            showVideoProgressIndicator: true,
+                            width: MediaQuery.of(context).size.width,
+                            aspectRatio: 16 / 9,
+                            bottomActions: [
+                              CurrentPosition(
+                                controller: screenService.controller!,
+                              ),
+                              ProgressBar(
+                                isExpanded: true,
+                                controller: screenService.controller!,
+                                colors: const ProgressBarColors(
+                                  playedColor: Colors.white,
+                                  handleColor: Colors.white,
+                                ),
+                              ),
+                              RemainingDuration(
+                                controller: screenService.controller!,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    fullVideoRoute,
+                                    arguments: screenService.controller!,
+                                  );
+                                },
+                                child: const Icon(
+                                  Icons.fullscreen,
+                                ),
+                              )
+                              // TotalDuration(),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          Text(videoService.singleVideo!.title),
+                          const SizedBox(height: 15),
+                          Text(
+                            "${videoService.singleVideo!.views} views",
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            videoService.singleVideo!.description,
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          _isLoaded
+                              ? SizedBox(
+                                  width: _bannerAd!.size.width.toDouble(),
+                                  height: _bannerAd!.size.height.toDouble(),
+                                  child: AdWidget(ad: _bannerAd!),
+                                )
+                              : const SizedBox(
+                                  height: 100,
+                                  width: double.infinity,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: ConstantColors.whiteColor,
+                                    ),
+                                  ),
+                                ),
+                          const SizedBox(height: 20),
+                          GridView.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10.0,
+                            mainAxisSpacing: 10.0,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: List.generate(
+                              videoService.suggestionVideos.length,
+                              (index) {
+                                var video =
+                                    videoService.suggestionVideos[index];
+
+                                return VideoWidget(
+                                  video: video,
+                                  onTap: () {
+                                    screenService.setCurrentVideo(
+                                      context: context,
+                                      video: video,
+                                    );
+                                    videoService.fetchVideo(videoID: video.id);
+                                    screenService.screentoVideoDetail();
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-      ),
+          );
+        }
+      },
     );
   }
 }

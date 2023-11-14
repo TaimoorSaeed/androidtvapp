@@ -11,9 +11,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // make sure you call `initializeApp` before using other Firebase services.
@@ -35,10 +37,36 @@ void main() async {
   runApp(const AndroidTVApp());
 }
 
-class AndroidTVApp extends StatelessWidget {
+class AndroidTVApp extends StatefulWidget {
   const AndroidTVApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<AndroidTVApp> createState() => _AndroidTVAppState();
+
+  static void setLocale(BuildContext context, Locale newLocale) {
+    _AndroidTVAppState? state =
+        context.findRootAncestorStateOfType<_AndroidTVAppState>();
+    state?.setLocale(newLocale);
+  }
+}
+
+class _AndroidTVAppState extends State<AndroidTVApp> {
+  Locale? _locale;
+
+  setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      _locale = Locale('en', '');
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -58,6 +86,9 @@ class AndroidTVApp extends StatelessWidget {
         child: MaterialApp(
           title: 'Suryoyo TV',
           debugShowCheckedModeBanner: false,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: _locale,
           theme: ThemeData(
             fontFamily: GoogleFonts.inter(
               fontWeight: FontWeight.w500,
