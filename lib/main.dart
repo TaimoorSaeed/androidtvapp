@@ -88,7 +88,18 @@ class _AndroidTVAppState extends State<AndroidTVApp> {
           debugShowCheckedModeBanner: false,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
+          // localizationsDelegates: [
+          //   GlobalMaterialLocalizations.delegate,
+          //   GlobalWidgetsLocalizations.delegate,
+          //   GlobalCupertinoLocalizations.delegate,
+          // ],
+          // supportedLocales: [
+          //   Locale('en'),
+          //   Locale('de'),
+          //   Locale('ar'),
+          // ],
           locale: _locale,
+
           theme: ThemeData(
             fontFamily: GoogleFonts.inter(
               fontWeight: FontWeight.w500,

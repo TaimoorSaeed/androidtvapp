@@ -3,11 +3,11 @@ import 'package:androidtvapp/application/service/screen_service.dart';
 import 'package:androidtvapp/application/service/video_service.dart';
 import 'package:androidtvapp/values/constant_colors.dart';
 import 'package:androidtvapp/widgets/video_widget.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChannelVideos extends StatefulWidget {
@@ -29,8 +29,7 @@ class _ChannelVideosState extends State<ChannelVideos>
       : 'ca-app-pub-3940256099942544/2934735716';
 
   late VideoPlayerController _controller;
-  final webViewController = WebViewController()
-    ..loadRequest(Uri.parse('https://deadsimplechat.com/IyL5YkDM3'));
+  ChewieController? _chewieController;
 
   void loadAd() {
     _bannerAd = BannerAd(
@@ -55,31 +54,43 @@ class _ChannelVideosState extends State<ChannelVideos>
     )..load();
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    loadAd();
+  _initPlayer() async {
     var screenService = Provider.of<ScreenService>(context, listen: false);
 
     if (screenService.currentChannelName == "Suboro TV") {
       _controller = VideoPlayerController.network(
         'http://fs4.suboroiptv.tv/suboromain/live/index.m3u8',
-      )..initialize().then(
-          (_) {
-            _controller.play();
-            setState(() {});
-          },
-        );
+      );
+
+      await _controller.initialize();
+
+      _chewieController = ChewieController(
+        videoPlayerController: _controller,
+        autoPlay: true,
+      );
+
+      setState(() {});
     }
   }
 
   @override
-  void dispose() {
-    if (ScreenService().currentChannelName == "Suboro TV") {
+  void initState() {
+    loadAd();
+    _initPlayer();
+
+    super.initState();
+  }
+
+  @override
+  void deactivate() {
+    var screenService = Provider.of<ScreenService>(context, listen: false);
+
+    if (screenService.currentChannelName == "Suboro TV") {
       _controller.dispose();
+      _chewieController?.dispose();
     }
-    super.dispose();
+
+    super.deactivate();
   }
 
   void _onKeyPressed(RawKeyEvent e) {
@@ -88,10 +99,10 @@ class _ChannelVideosState extends State<ChannelVideos>
         case 'Media Play Pause':
         case 'Select':
           setState(() {
-            if (_controller.value.isPlaying) {
-              _controller.pause();
+            if (_chewieController!.isPlaying) {
+              _chewieController!.pause();
             } else {
-              _controller.play();
+              _chewieController!.play();
             }
           });
           break;
@@ -129,38 +140,23 @@ class _ChannelVideosState extends State<ChannelVideos>
                         ),
                       ),
                       const SizedBox(height: 10),
-                      _controller.value.isInitialized
-                          ? AspectRatio(
-                              aspectRatio: _controller.value.aspectRatio,
-                              child: VideoPlayer(_controller),
-                            )
-                          : Container(),
-                      const SizedBox(height: 15),
+                      if (_chewieController != null)
+                        AspectRatio(
+                          aspectRatio: _controller.value.aspectRatio,
+                          child: Chewie(
+                            controller: _chewieController!,
+                          ),
+                        ),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
-              // if (screenService.currentChannelName == "Suryoyo Sat Germany")
-              //   Column(
-              //     crossAxisAlignment: CrossAxisAlignment.start,
-              //     children: [
-              //       const Text(
-              //         Constants.watchLive,
-              //         style: TextStyle(
-              //           fontWeight: FontWeight.w600,
-              //           fontSize: 20,
-              //         ),
-              //       ),
-              //       const SizedBox(height: 10),
-              //       WebViewWidget(controller: webViewController),
-              //       const SizedBox(height: 15),
-              //     ],
-              //   ),
               if (videoService.broadcastingVideos.isNotEmpty)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.liveBroadCasting,
+                      AppLocalizations.of(context)!.liveBroadcasting,
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 20,

@@ -11,6 +11,7 @@ environment:
 dependencies:
   cached_network_image: ^3.3.0
   cherry_toast: ^1.6.4
+  chewie: ^1.7.1
   cupertino_icons: ^1.0.2
   dio: ^5.3.3
   firebase_analytics: ^10.6.2
@@ -20,13 +21,12 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: any
   font_awesome_flutter: ^10.5.0
   google_fonts: ^6.1.0
   google_mobile_ads: ^3.1.0
+  intl: any
   provider: ^6.0.5
   video_player: ^2.7.2
-  webview_flutter: ^4.4.1
   youtube_player_flutter: ^8.1.2
 
 dev_dependencies:

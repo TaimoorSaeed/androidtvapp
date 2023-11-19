@@ -1,3 +1,4 @@
+import 'package:androidtvapp/application/model/language_model.dart';
 import 'package:androidtvapp/application/service/screen_service.dart';
 import 'package:androidtvapp/application/service/video_service.dart';
 import 'package:androidtvapp/main.dart';
@@ -19,7 +20,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String localization = "en";
+  List<Language> languages = [
+    Language(
+      languageName: "English",
+      languageShortCode: "en",
+    ),
+    Language(
+      languageName: "German",
+      languageShortCode: "de",
+    ),
+    Language(
+      languageName: "عربي",
+      languageShortCode: "ar",
+    ),
+  ];
+
+  late Language localization;
 
   int currentLBDrawerIndex = -1;
   int currentCDrawerIndex = -1;
@@ -51,6 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    localization = languages[0];
+
     super.initState();
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -63,16 +81,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _showNotification(RemoteNotification? notification) {
     CherryToast.info(
-      toastDuration: Duration(seconds: 5),
+      toastDuration: const Duration(seconds: 5),
       title: Text(
         notification!.body!,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.black,
         ),
       ),
       action: Text(
         notification.title!,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.black,
         ),
       ),
@@ -107,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           actions: [
-            DropdownButton(
+            DropdownButton<Language>(
               enableFeedback: true,
               iconSize: 16,
               borderRadius: BorderRadius.circular(16),
@@ -115,43 +133,35 @@ class _HomeScreenState extends State<HomeScreen> {
               dropdownColor: ConstantColors.secondMainColor,
               underline: Container(),
               padding: MediaQuery.of(context).size.width > 650
-                  ? const EdgeInsets.only(top: 15, right: 60)
-                  : const EdgeInsets.only(top: 15, right: 20),
-              items: const [
-                DropdownMenuItem(
-                  value: "en",
-                  child: Text(
-                    "en",
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: "de",
-                  child: Text(
-                    "de",
-                  ),
-                ),
-              ],
+                  ? const EdgeInsets.only(
+                      top: 15,
+                      right: 60,
+                      left: 60,
+                    )
+                  : const EdgeInsets.only(
+                      top: 15,
+                      right: 20,
+                      left: 20,
+                    ),
+              value: localization,
+              items: languages
+                  .map((language) => DropdownMenuItem(
+                        value: language,
+                        child: Text(
+                          language.languageName,
+                        ),
+                      ))
+                  .toList(),
               onChanged: (val) {
                 AndroidTVApp.setLocale(
                   context,
-                  Locale(val!, ''),
+                  Locale(val!.languageShortCode, ''),
                 );
 
                 setState(() {
                   localization = val;
                 });
-
-                // if (val == "en") {
-                //   setState(() {
-                //     localization = "English";
-                //   });
-                // } else {
-                //   setState(() {
-                //     localization = "German";
-                //   });
-                // }
               },
-              value: localization,
             ),
           ],
         ),
