@@ -5,12 +5,12 @@ import 'package:androidtvapp/main.dart';
 import 'package:androidtvapp/values/common.dart';
 import 'package:androidtvapp/values/constant_colors.dart';
 import 'package:androidtvapp/values/path.dart';
-import 'package:androidtvapp/widgets/search_widget.dart';
 import 'package:androidtvapp/widgets/sidebar_card_widget.dart';
 import 'package:cherry_toast/cherry_toast.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
     Language(
       languageName: "عربي",
-      languageShortCode: "ar",
+      languageShortCode: "hi",
     ),
   ];
 
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
               screenService.screentoDashboardScreen();
             },
             child: Image.asset(
-              Path.logo,
+              Path.pngLogo,
               width: 120,
             ),
           ),
@@ -172,38 +172,27 @@ class _HomeScreenState extends State<HomeScreen> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.all(0),
             children: [
-              DrawerHeader(
-                child: Column(
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: ConstantColors.mainColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Image.asset(
-                            Path.logo,
-                            width: 60,
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Icon(
-                            Icons.clear_sharp,
-                            size: 26,
-                            color: ConstantColors.secondMainColor,
-                          ),
-                        ),
-                      ],
+                    Image.asset(
+                      Path.colorLogo,
+                      width: 100,
                     ),
-                    const SizedBox(height: 30),
-                    const SearchWidget()
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(
+                        Icons.clear_sharp,
+                        size: 26,
+                        color: ConstantColors.secondMainColor,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -217,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return SideBarCardWidget(
                     thumbnail: item["thumbnail"],
                     name: item["name"],
-                    category: "TV",
+                    category: AppLocalizations.of(context)!.tvAndLiveBroadcasts,
                     isFocus: currentLBDrawerIndex == index,
                     onFocusChange: (focusChanged) {
                       setState(() {
@@ -255,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     thumbnail: Path.churchBG,
                     isFocus: currentCDrawerIndex == index,
                     name: item["name"],
-                    category: "Church",
+                    category: AppLocalizations.of(context)!.churches,
                     onFocusChange: (focusChanged) {
                       setState(() {
                         currentLBDrawerIndex = -1;
@@ -291,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return SideBarCardWidget(
                     thumbnail: item["thumbnail"],
                     name: item["name"],
-                    category: "Toons",
+                    category: AppLocalizations.of(context)!.toons,
                     isFocus: currentTOONSDrawerIndex == index,
                     onFocusChange: (focusChanged) {
                       setState(() {
@@ -328,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return SideBarCardWidget(
                     thumbnail: artist["thumbnail"],
                     name: artist["name"],
-                    category: "Music",
+                    category: AppLocalizations.of(context)!.artists,
                     isFocus: currentARTDrawerIndex == index,
                     onFocusChange: (focusChanged) {
                       setState(() {

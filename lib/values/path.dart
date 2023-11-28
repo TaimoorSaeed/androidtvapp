@@ -2,6 +2,7 @@ class Path {
   // App Logo
   static const String logo = "assets/vectors/logo.jpeg";
   static const String colorLogo = "assets/vectors/color-logo.jpeg";
+  static const String pngLogo = "assets/vectors/png-logo.png";
 
   // Images
   static const String banner = "assets/images/banner.jpg";

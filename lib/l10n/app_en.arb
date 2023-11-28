@@ -1,10 +1,10 @@
 {
-    "tvAndLiveBroadcasts": "TV & Live Broadcasts",
+    "tvAndLiveBroadcasts": "TV",
     "artists": "Artists",
     "churches": "Churches",
     "toons": "Toons",
     "watchLive": "Watch Live",
-    "liveBroadcasting": "Live Broadcasting",
+    "liveBroadcasting": "Past Live Broadcasts",
     "latestVideos": "Latest Videos",
     "mostViewed": "Most Viewed"
 }

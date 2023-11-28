@@ -28,8 +28,8 @@ class _ChannelVideosState extends State<ChannelVideos>
       ? 'ca-app-pub-3940256099942544/6300978111'
       : 'ca-app-pub-3940256099942544/2934735716';
 
-  late VideoPlayerController _controller;
-  ChewieController? _chewieController;
+  // late VideoPlayerController _controller;
+  // ChewieController? _chewieController;
 
   void loadAd() {
     _bannerAd = BannerAd(
@@ -54,29 +54,9 @@ class _ChannelVideosState extends State<ChannelVideos>
     )..load();
   }
 
-  _initPlayer() async {
-    var screenService = Provider.of<ScreenService>(context, listen: false);
-
-    if (screenService.currentChannelName == "Suboro TV") {
-      _controller = VideoPlayerController.network(
-        'http://fs4.suboroiptv.tv/suboromain/live/index.m3u8',
-      );
-
-      await _controller.initialize();
-
-      _chewieController = ChewieController(
-        videoPlayerController: _controller,
-        autoPlay: true,
-      );
-
-      setState(() {});
-    }
-  }
-
   @override
   void initState() {
     loadAd();
-    _initPlayer();
 
     super.initState();
   }
@@ -86,23 +66,25 @@ class _ChannelVideosState extends State<ChannelVideos>
     var screenService = Provider.of<ScreenService>(context, listen: false);
 
     if (screenService.currentChannelName == "Suboro TV") {
-      _controller.dispose();
-      _chewieController?.dispose();
+      screenService.liveStreamController.dispose();
+      screenService.chewieController?.dispose();
     }
 
     super.deactivate();
   }
 
   void _onKeyPressed(RawKeyEvent e) {
+    var screenService = Provider.of<ScreenService>(context, listen: false);
+
     if (e.runtimeType.toString() == 'RawKeyDownEvent') {
       switch (e.logicalKey.debugName) {
         case 'Media Play Pause':
         case 'Select':
           setState(() {
-            if (_chewieController!.isPlaying) {
-              _chewieController!.pause();
+            if (screenService.chewieController!.isPlaying) {
+              screenService.chewieController!.pause();
             } else {
-              _chewieController!.play();
+              screenService.chewieController!.play();
             }
           });
           break;
@@ -140,11 +122,12 @@ class _ChannelVideosState extends State<ChannelVideos>
                         ),
                       ),
                       const SizedBox(height: 10),
-                      if (_chewieController != null)
+                      if (screenService.chewieController != null)
                         AspectRatio(
-                          aspectRatio: _controller.value.aspectRatio,
+                          aspectRatio: screenService
+                              .liveStreamController.value.aspectRatio,
                           child: Chewie(
-                            controller: _chewieController!,
+                            controller: screenService.chewieController!,
                           ),
                         ),
                       const SizedBox(height: 20),

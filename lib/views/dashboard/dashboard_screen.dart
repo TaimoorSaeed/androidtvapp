@@ -90,26 +90,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Stack(
-                alignment: Alignment.bottomLeft,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
-                    child: Image.asset(
-                      Path.banner,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, bottom: 20),
-                    child: Image.asset(
-                      Path.bannerContent,
-                      height:
-                          MediaQuery.of(context).size.width > 650 ? null : 80,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
+              // Stack(
+              //   alignment: Alignment.bottomLeft,
+              //   children: [
+              //     ClipRRect(
+              //       borderRadius: BorderRadius.circular(14),
+              //       child: Image.asset(
+              //         Path.banner,
+              //       ),
+              //     ),
+              //     Padding(
+              //       padding: const EdgeInsets.only(left: 20, bottom: 20),
+              //       child: Image.asset(
+              //         Path.bannerContent,
+              //         height:
+              //             MediaQuery.of(context).size.width > 650 ? null : 80,
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // const SizedBox(height: 30),
               Text(
                 AppLocalizations.of(context)!.tvAndLiveBroadcasts,
                 style: const TextStyle(

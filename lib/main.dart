@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print
-
 import 'package:androidtvapp/application/service/firebase_service.dart';
 import 'package:androidtvapp/application/service/screen_service.dart';
 import 'package:androidtvapp/application/service/video_service.dart';
@@ -11,7 +10,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
@@ -96,7 +94,7 @@ class _AndroidTVAppState extends State<AndroidTVApp> {
           // supportedLocales: [
           //   Locale('en'),
           //   Locale('de'),
-          //   Locale('ar'),
+          //   Locale('hi'),
           // ],
           locale: _locale,
 
