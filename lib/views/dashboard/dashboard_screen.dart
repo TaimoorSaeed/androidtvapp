@@ -90,26 +90,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Stack(
-              //   alignment: Alignment.bottomLeft,
-              //   children: [
-              //     ClipRRect(
-              //       borderRadius: BorderRadius.circular(14),
-              //       child: Image.asset(
-              //         Path.banner,
-              //       ),
-              //     ),
-              //     Padding(
-              //       padding: const EdgeInsets.only(left: 20, bottom: 20),
-              //       child: Image.asset(
-              //         Path.bannerContent,
-              //         height:
-              //             MediaQuery.of(context).size.width > 650 ? null : 80,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(height: 30),
               Text(
                 AppLocalizations.of(context)!.tvAndLiveBroadcasts,
                 style: const TextStyle(
@@ -214,30 +194,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               const SizedBox(height: 25),
-              _isLoaded
-                  ? Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: SizedBox(
-                            width: _bannerAd!.size.width.toDouble(),
-                            height: _bannerAd!.size.height.toDouble(),
-                            child: AdWidget(ad: _bannerAd!),
+              if (Platform.isAndroid)
+                Column(
+                  children: [
+                    _isLoaded
+                        ? Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                child: SizedBox(
+                                  width: _bannerAd!.size.width.toDouble(),
+                                  height: _bannerAd!.size.height.toDouble(),
+                                  child: AdWidget(ad: _bannerAd!),
+                                ),
+                              ),
+                            ],
+                          )
+                        : SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: 60,
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                color: ConstantColors.whiteColor,
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
-                    )
-                  : SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 60,
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: ConstantColors.whiteColor,
-                        ),
-                      ),
-                    ),
-              const SizedBox(height: 25),
+                    const SizedBox(height: 25),
+                  ],
+                ),
               Text(
                 AppLocalizations.of(context)!.churches,
                 style: const TextStyle(

@@ -20,6 +20,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   List<Language> languages = [
     Language(
       languageName: "English",
@@ -106,10 +108,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return WillPopScope(
       onWillPop: () async {
         screenService.screentoDashboardScreen();
+        _scaffoldKey.currentState!.closeDrawer();
 
         return false;
       },
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: ConstantColors.mainColor,
         appBar: AppBar(
           backgroundColor: ConstantColors.mainColor,

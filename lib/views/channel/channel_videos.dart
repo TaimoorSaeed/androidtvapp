@@ -3,11 +3,9 @@ import 'package:androidtvapp/application/service/screen_service.dart';
 import 'package:androidtvapp/application/service/video_service.dart';
 import 'package:androidtvapp/values/constant_colors.dart';
 import 'package:androidtvapp/widgets/video_widget.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChannelVideos extends StatefulWidget {
@@ -27,9 +25,6 @@ class _ChannelVideosState extends State<ChannelVideos>
   final adUnitId = Platform.isAndroid
       ? 'ca-app-pub-3940256099942544/6300978111'
       : 'ca-app-pub-3940256099942544/2934735716';
-
-  // late VideoPlayerController _controller;
-  // ChewieController? _chewieController;
 
   void loadAd() {
     _bannerAd = BannerAd(
@@ -62,37 +57,6 @@ class _ChannelVideosState extends State<ChannelVideos>
   }
 
   @override
-  void deactivate() {
-    var screenService = Provider.of<ScreenService>(context, listen: false);
-
-    if (screenService.currentChannelName == "Suboro TV") {
-      screenService.liveStreamController.dispose();
-      screenService.chewieController?.dispose();
-    }
-
-    super.deactivate();
-  }
-
-  void _onKeyPressed(RawKeyEvent e) {
-    var screenService = Provider.of<ScreenService>(context, listen: false);
-
-    if (e.runtimeType.toString() == 'RawKeyDownEvent') {
-      switch (e.logicalKey.debugName) {
-        case 'Media Play Pause':
-        case 'Select':
-          setState(() {
-            if (screenService.chewieController!.isPlaying) {
-              screenService.chewieController!.pause();
-            } else {
-              screenService.chewieController!.play();
-            }
-          });
-          break;
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     var screenService = Provider.of<ScreenService>(context, listen: true);
     var videoService = Provider.of<VideoService>(context, listen: true);
@@ -107,33 +71,6 @@ class _ChannelVideosState extends State<ChannelVideos>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (screenService.currentChannelName == "Suboro TV")
-                RawKeyboardListener(
-                  focusNode: FocusNode(),
-                  onKey: _onKeyPressed,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.watchLive,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      if (screenService.chewieController != null)
-                        AspectRatio(
-                          aspectRatio: screenService
-                              .liveStreamController.value.aspectRatio,
-                          child: Chewie(
-                            controller: screenService.chewieController!,
-                          ),
-                        ),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                ),
               if (videoService.broadcastingVideos.isNotEmpty)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

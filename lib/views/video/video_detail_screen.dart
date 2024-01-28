@@ -50,16 +50,65 @@ class _VideoDetailScreenState extends State<VideoDetailScreen> {
     )..load();
   }
 
-  void _onKeyPressed(RawKeyEvent event) {
-    var screenService = Provider.of<ScreenService>(context, listen: true);
+  // void _onKeyPressed(RawKeyEvent event) {
+  //   var screenService = Provider.of<ScreenService>(context, listen: true);
 
-    if (event is RawKeyDownEvent) {
-      if (event.logicalKey == LogicalKeyboardKey.pause) {
-        screenService.controller!.pause();
-      } else if (event.logicalKey == LogicalKeyboardKey.play) {
-        screenService.controller!.play();
-      }
+  //   if (event is RawKeyDownEvent) {
+  //     if (event.logicalKey == LogicalKeyboardKey.pause) {
+  //       screenService.controller!.pause();
+  //     } else if (event.logicalKey == LogicalKeyboardKey.play) {
+  //       screenService.controller!.play();
+  //     }
+  //   }
+  // }
+
+  void _onKeyPressed(RawKeyEvent e) {
+    print("Event: $e");
+
+    var screenService = Provider.of<ScreenService>(context, listen: false);
+
+    if (e.logicalKey == LogicalKeyboardKey.select) {
+      Navigator.pushNamed(
+        context,
+        fullVideoRoute,
+        arguments: screenService.controller!,
+      );
+    } else if (e.logicalKey == LogicalKeyboardKey.mediaPlayPause) {
+      setState(() {
+        if (screenService.controller!.value.isPlaying) {
+          screenService.controller!.pause();
+        } else {
+          screenService.controller!.play();
+        }
+      });
+    } else if (e.logicalKey == LogicalKeyboardKey.arrowUp) {
+      // Handle arrow up key press
+    } else if (e.logicalKey == LogicalKeyboardKey.arrowDown) {
+      // Handle arrow down key press
+    } else if (e.logicalKey == LogicalKeyboardKey.arrowLeft) {
+      // Handle arrow left key press
+    } else if (e.logicalKey == LogicalKeyboardKey.arrowRight) {
+      // Handle arrow right key press
+    } else if (e.logicalKey == LogicalKeyboardKey.enter) {
+      // Handle enter key press
+    } else if (e.logicalKey == LogicalKeyboardKey.escape) {
+      // Handle escape key press (exit full-screen, for example)
     }
+
+    // if (e.runtimeType.toString() == 'RawKeyDownEvent') {
+    //   switch (e.logicalKey.debugName) {
+    //     case 'Media Play Pause':
+    //     case 'Select':
+    //       setState(() {
+    //         if (screenService.controller!.value.isPlaying) {
+    //           screenService.controller!.pause();
+    //         } else {
+    //           screenService.controller!.play();
+    //         }
+    //       });
+    //       break;
+    //   }
+    // }
   }
 
   @override
@@ -157,10 +206,13 @@ class _VideoDetailScreenState extends State<VideoDetailScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 10),
-                                  Text(
-                                    videoService.singleVideo!.description,
-                                    style: const TextStyle(
-                                      fontSize: 12,
+                                  InkWell(
+                                    onTap: () {},
+                                    child: Text(
+                                      videoService.singleVideo!.description,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                      ),
                                     ),
                                   ),
                                 ],
