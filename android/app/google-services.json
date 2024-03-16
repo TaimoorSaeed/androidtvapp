@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "736129369732",
-    "project_id": "suryoyotube-cb233",
-    "storage_bucket": "suryoyotube-cb233.appspot.com"
+    "project_number": "28674801231",
+    "project_id": "suborotvapp",
+    "storage_bucket": "suborotvapp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:736129369732:android:517f829e30e62fd8c664d1",
+        "mobilesdk_app_id": "1:28674801231:android:12b495aa74aa13b842f43a",
         "android_client_info": {
-          "package_name": "com.evismedia.suryoyotube"
+          "package_name": "com.syriacorthodoxpatriarchate.suborotv"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBKo2PEKA7GKcxAdoq8X-Pc2Eq7-sOLEkw"
+          "current_key": "AIzaSyDwjKJnjTDY9lNGrkwnXSNHg5QLuilu-Fs"
         }
       ],
       "services": {

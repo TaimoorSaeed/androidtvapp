@@ -8,10 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class VideoService extends ChangeNotifier {
-  List<Video> broadcastingVideos = [];
   List<Video> latestVideos = [];
-  List<Video> popularVideos = [];
-  List<Video> suggestionVideos = [];
 
   SingleVideo? singleVideo;
 
@@ -21,62 +18,14 @@ class VideoService extends ChangeNotifier {
   bool isVideoFetching = false;
   bool isSuggestionVideosFetching = false;
 
-  Future<List<Video>?> fetchBroadcastingVideos({
-    required String channelID,
-  }) async {
-    try {
-      isBroadcastVideosFetching = true;
-
-      Map<String, dynamic> parameters = {
-        'part': 'snippet',
-        'key': YOUTUBE_API_KEY,
-        'channelId': channelID,
-        'eventType': 'completed',
-        'order': 'date',
-        'maxResults': 10,
-        'type': 'video'
-      };
-
-      var res = await AndroidTVApi.dio.get(
-        "search",
-        queryParameters: parameters,
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-          },
-        ),
-      );
-
-      broadcastingVideos = [];
-
-      for (var element in (res.data["items"] as List)) {
-        broadcastingVideos.add(Video.fromMap(element));
-      }
-
-      isBroadcastVideosFetching = false;
-      notifyListeners();
-
-      return broadcastingVideos;
-    } on DioException catch (e) {
-      isBroadcastVideosFetching = false;
-      notifyListeners();
-
-      print(e.response!.data);
-
-      return null;
-    }
-  }
-
-  Future<List<Video>?> fetchLatestVideos({
-    required String channelID,
-  }) async {
+  Future<List<Video>?> fetchLatestVideos() async {
     try {
       isLatestVideosFetching = true;
 
       Map<String, dynamic> parameters = {
         'part': 'snippet',
         'key': YOUTUBE_API_KEY,
-        'channelId': channelID,
+        'channelId': SUBORO_TV,
         'order': 'date',
         'maxResults': 10,
         'type': 'video'
@@ -91,8 +40,6 @@ class VideoService extends ChangeNotifier {
           },
         ),
       );
-
-      print(res.data["items"]);
 
       latestVideos = [];
 
@@ -114,99 +61,7 @@ class VideoService extends ChangeNotifier {
     }
   }
 
-  Future<List<Video>?> fetchPopularVideos({
-    required String channelID,
-  }) async {
-    try {
-      isPopularVideosFetching = true;
-
-      Map<String, dynamic> parameters = {
-        'part': 'snippet',
-        'key': YOUTUBE_API_KEY,
-        'channelId': channelID,
-        'order': 'viewCount',
-        'maxResults': 10,
-        'type': 'video'
-      };
-
-      var res = await AndroidTVApi.dio.get(
-        "search",
-        queryParameters: parameters,
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-          },
-        ),
-      );
-
-      popularVideos = [];
-
-      for (var element in (res.data["items"] as List)) {
-        popularVideos.add(Video.fromMap(element));
-      }
-
-      isPopularVideosFetching = false;
-      notifyListeners();
-
-      return popularVideos;
-    } on DioException catch (e) {
-      isPopularVideosFetching = false;
-      notifyListeners();
-
-      print(e.response!.data);
-
-      return null;
-    }
-  }
-
-  Future<List<Video>?> fetchSuggestionVideos({
-    required String channelID,
-  }) async {
-    try {
-      isSuggestionVideosFetching = true;
-
-      Map<String, dynamic> parameters = {
-        'part': 'snippet',
-        'key': YOUTUBE_API_KEY,
-        'channelId': channelID,
-        'maxResults': 4,
-        'order': 'relevance',
-        'type': 'video'
-      };
-
-      var res = await AndroidTVApi.dio.get(
-        "search",
-        queryParameters: parameters,
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-          },
-        ),
-      );
-
-      suggestionVideos = [];
-
-      print(res.data["items"]);
-
-      for (var element in (res.data["items"] as List)) {
-        suggestionVideos.add(Video.fromMap(element));
-      }
-
-      isSuggestionVideosFetching = false;
-      notifyListeners();
-
-      return suggestionVideos;
-    } on DioException catch (e) {
-      isSuggestionVideosFetching = false;
-      notifyListeners();
-
-      print(e.response!.data);
-
-      return null;
-    }
-  }
-
-  Future<List<Video>?> fetchVideo({
+  Future<SingleVideo?> fetchVideo({
     required String videoID,
   }) async {
     try {
@@ -234,7 +89,7 @@ class VideoService extends ChangeNotifier {
       isVideoFetching = false;
       notifyListeners();
 
-      return popularVideos;
+      return singleVideo;
     } on DioException catch (e) {
       isVideoFetching = false;
       notifyListeners();

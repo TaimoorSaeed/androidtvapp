@@ -52,10 +52,10 @@ class _FullVideoScreenState extends State<FullVideoScreen> {
     if (e.logicalKey == LogicalKeyboardKey.select) {
     } else if (e.logicalKey == LogicalKeyboardKey.mediaPlayPause) {
       setState(() {
-        if (screenService.controller!.value.isPlaying) {
-          screenService.controller!.pause();
+        if (screenService.videoController!.value.isPlaying) {
+          screenService.videoController!.pause();
         } else {
-          screenService.controller!.play();
+          screenService.videoController!.play();
         }
       });
     } else if (e.logicalKey == LogicalKeyboardKey.arrowUp) {
