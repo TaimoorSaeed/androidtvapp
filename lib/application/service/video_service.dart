@@ -22,17 +22,10 @@ class VideoService extends ChangeNotifier {
     try {
       isLatestVideosFetching = true;
 
-      Map<String, dynamic> parameters = {
-        'part': 'snippet',
-        'key': YOUTUBE_API_KEY,
-        'channelId': SUBORO_TV,
-        'order': 'date',
-        'maxResults': 10,
-        'type': 'video'
-      };
+      Map<String, dynamic> parameters = {};
 
       var res = await AndroidTVApi.dio.get(
-        "search",
+        "latestvideos.php",
         queryParameters: parameters,
         options: Options(
           headers: {
@@ -69,13 +62,11 @@ class VideoService extends ChangeNotifier {
       notifyListeners();
 
       Map<String, dynamic> parameters = {
-        'part': 'snippet,contentDetails,statistics',
-        'key': YOUTUBE_API_KEY,
         'id': videoID,
       };
 
       var res = await AndroidTVApi.dio.get(
-        "videos",
+        "getvideo.php",
         queryParameters: parameters,
         options: Options(
           headers: {

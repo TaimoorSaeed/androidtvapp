@@ -20,15 +20,10 @@ class PlaylistService extends ChangeNotifier {
     try {
       isLoading = true;
 
-      Map<String, dynamic> parameters = {
-        'part': 'snippet,contentDetails',
-        'key': YOUTUBE_API_KEY,
-        'channelId': SUBORO_TV,
-        'maxResults': 10,
-      };
+      Map<String, dynamic> parameters = {};
 
       var res = await AndroidTVApi.dio.get(
-        "playlists",
+        "latestplaylists.php",
         queryParameters: parameters,
         options: Options(
           headers: {
@@ -60,15 +55,10 @@ class PlaylistService extends ChangeNotifier {
     try {
       isLoading = true;
 
-      Map<String, dynamic> parameters = {
-        'part': 'snippet,contentDetails',
-        'key': YOUTUBE_API_KEY,
-        'channelId': SUBORO_TV,
-        'maxResults': 100,
-      };
+      Map<String, dynamic> parameters = {};
 
       var res = await AndroidTVApi.dio.get(
-        "playlists",
+        "allplaylists.php",
         queryParameters: parameters,
         options: Options(
           headers: {
@@ -102,15 +92,11 @@ class PlaylistService extends ChangeNotifier {
       isFetching = true;
 
       Map<String, dynamic> parameters = {
-        'part': 'snippet,contentDetails',
-        'key': YOUTUBE_API_KEY,
-        'channelId': SUBORO_TV,
-        'maxResults': 50,
         'pageToken': nextPageToken,
       };
 
       var res = await AndroidTVApi.dio.get(
-        "playlists",
+        "allplaylists_paginated.php",
         queryParameters: parameters,
         options: Options(
           headers: {
@@ -145,14 +131,11 @@ class PlaylistService extends ChangeNotifier {
       isLoading = true;
 
       Map<String, dynamic> parameters = {
-        'part': 'snippet,contentDetails',
-        'key': YOUTUBE_API_KEY,
         'playlistId': playlistId,
-        'maxResults': 50,
       };
 
       var res = await AndroidTVApi.dio.get(
-        "playlistItems",
+        "getplaylistitems.php",
         queryParameters: parameters,
         options: Options(
           headers: {

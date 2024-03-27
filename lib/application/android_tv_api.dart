@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 class AndroidTVApi {
   static final BaseOptions _baseOptions = BaseOptions(
-    baseUrl: "https://youtube.googleapis.com/youtube/v3/",
+    baseUrl: "https://suborotv.net/api/",
   );
 
   // For unauthenticated routes

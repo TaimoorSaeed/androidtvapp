@@ -10,11 +10,11 @@ class FirebaseService extends ChangeNotifier {
   Future<void> initNotification() async {
     await messaging.requestPermission();
     // if (Platform.isIOS) {
-    //   final fcmToken = await messaging.getAPNSToken();
-    //   print("Token: $fcmToken");
-    // } else {
-    final fcmToken = await messaging.getToken();
+    final fcmToken = await messaging.getAPNSToken();
     print("Token: $fcmToken");
+    // } else {
+    // final fcmToken = await messaging.getToken();
+    // print("Token: $fcmToken");
     // }
   }
 }
