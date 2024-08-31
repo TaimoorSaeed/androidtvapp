@@ -235,6 +235,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Navigator.pop(context);
                 },
               ),
+              ListTile(
+                splashColor: ConstantColors.secondMainColor,
+                focusColor: ConstantColors.secondMainColor,
+                title: const Text(
+                  "Donations",
+                  style: TextStyle(
+                    color: ConstantColors.black,
+                  ),
+                ),
+                onTap: () {
+                  screenService
+                      .screenToDonations("https://square.link/u/sRuKb1b0");
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                splashColor: ConstantColors.secondMainColor,
+                focusColor: ConstantColors.secondMainColor,
+                title: const Text(
+                  "About Suboro TV",
+                  style: TextStyle(
+                    color: ConstantColors.black,
+                  ),
+                ),
+                onTap: () {
+                  screenService.screenToDonations(
+                      "https://suborotv.net/api/content/about-suborotv.html");
+                  Navigator.pop(context);
+                },
+              ),
             ],
           ),
         ),

@@ -28,6 +28,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
+
+  // For Andriod One this Method
+
   // await Firebase.initializeApp(
   //   options: FirebaseOptions(
   //     apiKey:
@@ -38,6 +41,8 @@ void main() async {
   //     projectId: "suborotvapp", //paste your project id here
   //   ),
   // );
+
+  // For iOS open this:
   await FirebaseService().initNotification();
 
   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);

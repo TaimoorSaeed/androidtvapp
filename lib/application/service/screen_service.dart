@@ -1,3 +1,4 @@
+import 'package:androidtvapp/views/donations.dart';
 import 'package:androidtvapp/views/home/home_screen.dart';
 import 'package:androidtvapp/views/live_stream/live_stream_screen.dart';
 import 'package:androidtvapp/views/playlist/all_playlist_screen.dart';
@@ -92,6 +93,11 @@ class ScreenService extends ChangeNotifier {
 
   void screenToAllPlaylist() {
     screen = const AllPlaylistScreen();
+    notifyListeners();
+  }
+
+  void screenToDonations(String url) {
+    screen = DonationsScreen(url: url);
     notifyListeners();
   }
 
